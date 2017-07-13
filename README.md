@@ -10,4 +10,5 @@ This is a tutorial about different network virtualizatioin technologies
 - OpenVSwitch Lab
   - [OpenVSwitch Manipulation](lab_ovs/ovs-manipulation.md)
   - [OpenVSwitch with Namespaces](lab_ovs/ovs-namespace.md)
-  - [OpenVSwitch with KVM VMs](lab_ovs/kvm/ovs-kvm-vm.md)
+  - [OpenVSwitch with KVM VMs](lab_ovs/ovs-kvm-vm.md)
+  - [OpenVSwitch with Libvirt VMs](lab_ovs/libvirt/ovs-libvirt-vm.md)

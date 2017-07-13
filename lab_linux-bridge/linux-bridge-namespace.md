@@ -1,4 +1,4 @@
-# Linux Bridge
+# Linux Bridge with Namespace
 
 ## Prerequisite
 

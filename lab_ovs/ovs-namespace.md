@@ -1,4 +1,4 @@
-# OVS Bridge with Namespace
+# OVS with Namespace
 
 ## Prerequisite
 
