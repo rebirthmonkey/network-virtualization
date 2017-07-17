@@ -3,7 +3,7 @@
 ## Prerequisite
 
 ```bash
-sudo apt-get install bridge-utils openvswitch-common openvswitch-switch
+sudo apt install bridge-utils openvswitch-common openvswitch-switch
 sudo su
 ```
 

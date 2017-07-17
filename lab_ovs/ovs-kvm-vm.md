@@ -85,6 +85,3 @@ Monitor Traffic between VM1 and VM2 from the host
 ```bash
 tcpdump -i vport1 icmp
 ```
-
-
-
