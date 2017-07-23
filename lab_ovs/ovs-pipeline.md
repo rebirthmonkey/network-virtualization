@@ -65,7 +65,7 @@ ovs-ofctl add-flow br0 "table=1,priority=99,in_port=4,vlan_tci=0,actions=mod_vla
 Tests:
 - send to port 1 `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=0`: resubmit to `Table2`
 - send to port 2 without VLAN ID `ovs-appctl ofproto/trace br0 in_port=2,vlan_tci=0`: set VLAN ID to 20 and resubmit to `Table2`
-- send to port 3 with VLAN ID `ovs-appctl ofproto/trace br0 in_port=2,vlan_tci=88`: drop
+- send to port 3 with VLAN ID `ovs-appctl ofproto/trace br0 in_port=3,vlan_tci=88`: drop
 
 
 ### Table2
