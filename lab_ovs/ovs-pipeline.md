@@ -50,7 +50,7 @@ If no other rules match, then drop the packet
 ovs-ofctl add-flow br0 table=1,priority=0,actions=drop
 ```
 
-Send all packets from port 1 to `Table22`
+Send all packets from port 1 to `Table2`
 ```bash
 ovs-ofctl add-flow br0 "table=1,priority=99,in_port=1,actions=resubmit(,2)"
 ```
