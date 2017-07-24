@@ -10,7 +10,7 @@ sudo su
 
 ## Network Devices
 
-### Private Bridge
+### Linux Private Bridge
 Create a private bridge
 ```bash
 ip link add br-private type bridge

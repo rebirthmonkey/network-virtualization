@@ -89,13 +89,13 @@ ip link set dev veth-2 up
 ip link set dev veth-3 up
 ip netns exec ns1 ip link set dev lo up
 ip netns exec ns1 ip link set eth0-1 up
-ip netns exec ns1 ip address add 10.0.0.1/24 dev eth0-1
+ip netns exec ns1 ip address add 8.8.8.7/24 dev eth0-1
 ip netns exec ns2 ip link set dev lo up
 ip netns exec ns2 ip link set eth0-2 up
-ip netns exec ns2 ip address add 10.0.0.2/24 dev eth0-2
+ip netns exec ns2 ip address add 8.8.8.8/24 dev eth0-2
 ip netns exec ns3 ip link set dev lo up
 ip netns exec ns3 ip link set eth0-3 up
-ip netns exec ns3 ip address add 10.0.0.3/24 dev eth0-3
+ip netns exec ns3 ip address add 8.8.8.9/24 dev eth0-3
 ```
 
 ## Flow Table Configuration
@@ -114,8 +114,8 @@ ovs-ofctl dump-flows sw
 Authorize all IP flows between 1 and 2
 ```bash
 ovs-ofctl add-flow sw arp,actions=normal
-ovs-ofctl add-flow sw priority=800,ip,nw_src=10.0.0.1,nw_dst=10.0.0.2,actions=normal
-ovs-ofctl add-flow sw priority=800,ip,nw_src=10.0.0.2,nw_dst=10.0.0.1,actions=normal
+ovs-ofctl add-flow sw priority=800,ip,nw_src=8.8.8.7,nw_dst=8.8.8.8,actions=normal
+ovs-ofctl add-flow sw priority=800,ip,nw_src=8.8.8.8,nw_dst=8.8.8.7,actions=normal
 ```
 
 Show
@@ -125,12 +125,12 @@ ovs-ofctl dump-flows sw
 
 Test
 ```bash
-ip netns exec ns1 ping 10.0.0.2 # OK 
-ip netns exec ns1 ping 10.0.0.3 # OK
-ip netns exec ns2 ping 10.0.0.1 # OK
-ip netns exec ns2 ping 10.0.0.3 # OK
-ip netns exec ns3 ping 10.0.0.1 # OK
-ip netns exec ns3 ping 10.0.0.2 # OK
+ip netns exec ns1 ping 8.8.8.8 # OK 
+ip netns exec ns1 ping 8.8.8.9 # OK
+ip netns exec ns2 ping 8.8.8.7 # OK
+ip netns exec ns2 ping 8.8.8.9 # OK
+ip netns exec ns3 ping 8.8.8.7 # OK
+ip netns exec ns3 ping 8.8.8.8 # OK
 ```
 
 
@@ -149,8 +149,8 @@ ovs-ofctl dump-flows sw
 Authorize only ICMP flows from 1 to 2
 ```bash
 ovs-ofctl add-flow sw arp,actions=normal
-ovs-ofctl add-flow sw priority=800,icmp,icmp_type=8,nw_src=10.0.0.1,nw_dst=10.0.0.2,actions=normal
-ovs-ofctl add-flow sw priority=800,icmp,icmp_type=0,nw_src=10.0.0.2,nw_dst=10.0.0.1,actions=normal
+ovs-ofctl add-flow sw priority=800,icmp,icmp_type=8,nw_src=8.8.8.7,nw_dst=8.8.8.8,actions=normal
+ovs-ofctl add-flow sw priority=800,icmp,icmp_type=0,nw_src=8.8.8.8,nw_dst=8.8.8.7,actions=normal
 ```
 
 Show
@@ -160,12 +160,12 @@ ovs-ofctl dump-flows sw
 
 Test
 ```bash
-ip netns exec ns1 ping 10.0.0.2 # OK 
-ip netns exec ns1 ping 10.0.0.3 # KO
-ip netns exec ns2 ping 10.0.0.1 # KO
-ip netns exec ns2 ping 10.0.0.3 # KO
-ip netns exec ns3 ping 10.0.0.1 # KO
-ip netns exec ns3 ping 10.0.0.2 # KO
+ip netns exec ns1 ping 8.8.8.8 # OK 
+ip netns exec ns1 ping 8.8.8.9 # KO
+ip netns exec ns2 ping 8.8.8.7 # KO
+ip netns exec ns2 ping 8.8.8.9 # KO
+ip netns exec ns3 ping 8.8.8.7 # KO
+ip netns exec ns3 ping 8.8.8.8 # KO
 ```
 
 
@@ -184,8 +184,8 @@ ovs-ofctl dump-flows sw
 Authorize only ICMP flows from 1 to 2
 ```bash
 ovs-ofctl add-flow sw arp,actions=normal
-ovs-ofctl add-flow sw priority=800,icmp,icmp_type=8,nw_src=10.0.0.1,nw_dst=10.0.0.0/24,actions=normal
-ovs-ofctl add-flow sw priority=800,icmp,icmp_type=0,nw_src=10.0.0.0/24,nw_dst=10.0.0.1,actions=normal
+ovs-ofctl add-flow sw priority=800,icmp,icmp_type=8,nw_src=8.8.8.7,nw_dst=8.8.8..0/24,actions=normal
+ovs-ofctl add-flow sw priority=800,icmp,icmp_type=0,nw_src=8.8.8.0/24,nw_dst=8.8.8.7,actions=normal
 ```
 
 Show
@@ -195,12 +195,12 @@ ovs-ofctl dump-flows sw
 
 Test
 ```bash
-ip netns exec ns1 ping 10.0.0.2 # OK 
-ip netns exec ns1 ping 10.0.0.3 # OK
-ip netns exec ns2 ping 10.0.0.1 # KO
-ip netns exec ns2 ping 10.0.0.3 # KO
-ip netns exec ns3 ping 10.0.0.1 # KO
-ip netns exec ns3 ping 10.0.0.2 # KO
+ip netns exec ns1 ping 8.8.8.8 # OK 
+ip netns exec ns1 ping 8.8.8.9 # OK
+ip netns exec ns2 ping 8.8.8.7 # KO
+ip netns exec ns2 ping 8.8.8.9 # KO
+ip netns exec ns3 ping 8.8.8.7 # KO
+ip netns exec ns3 ping 8.8.8.8 # KO
 ```
 
 

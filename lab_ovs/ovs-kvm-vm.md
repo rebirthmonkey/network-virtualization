@@ -1,87 +1,80 @@
 # OVS Bridge between VMs
-
 ## Prerequisite
-
 ```bash
-sudo apt-get install bridge-utils openvswitch-common openvswitch-switch
+sudo apt install bridge-utils openvswitch-common openvswitch-switch
 sudo su
 ```
 
 
-## Manipulation
-
-### Host Part
-
-Create an OVS bridge 
+## Network Devices
+### OVS Private Bridge
+Create an OVS private bridge 
 ```bash
-ovs-vsctl add-br somebr
+ovs-vsctl add-br ovs-br-private
 ovs-vsctl show
-ip link set dev somebr up
-ip addr add 192.168.21.1/24 broadcast 192.168.21.255 dev somebr
+ip link set dev ovs-br-private up
+ip addr add 8.8.8.7/24 broadcast 8.8.8.255 dev ovs-br-private
 ```
       
-Create and activate 2 TAP devices:
+### TAP 
+Create, activate and bind 2 TAP devices
 ```bash
 echo 1 > /proc/sys/net/ipv4/ip_forward
-ip tuntap add mode tap vport1
-ip tuntap add mode tap vport2
-ifconfig vport1 up
-ifconfig vport2 up
-ovs-vsctl add-port somebr vport1
-ovs-vsctl add-port somebr vport2
+ip tuntap add mode tap tap1
+ip tuntap add mode tap tap2
+ip link set dev tap1 up
+ip link set dev tap2 up
+ovs-vsctl add-port ovs-br-private tap1
+ovs-vsctl add-port ovs-br-private tap2
 ovs-vsctl show
 ```
 
-
-###  VM1 Part
-
+## VM
+###  Launch VM1
 Create VM1
 ```bash
-kvm debian-mini.img -device virtio-net-pci,netdev=net0,mac='12:34:56:AB:CD:81' -netdev tap,id=net0,ifname=vport1,script=no,downscript=no -name vm1 -daemonize
+kvm debian_wheezy_amd64_standard1.qcow2 -device virtio-net-pci,netdev=net0,mac=12:34:56:AB:CD:81 -netdev tap,id=net0,ifname=tap1,script=no,downscript=no -name vm1 -daemonize
 ```
 
-Setup VM1
+Setup VM1, login:`root`, password: `root` 
 ```bash
-su
-ifconfig eth0 192.168.21.2 netmask 255.255.255.0 broadcast 192.168.21.255
-route add default gw 192.168.21.1
+ip addr add 8.8.8.8/24 broadcast 8.8.8.255 dev eth0
+route add default gw 8.8.8.1
 ```
 
 Test the gateway
 ```bash
-ping 192.168.21.1
+ping 8.8.8.1
 ```
 
 
-###  VM2 Part
-
+### Launch VM2
 Create VM2
 ```bash
-kvm debian-mini2.img -device virtio-net-pci,netdev=net0,mac='12:34:56:AB:CD:82' -netdev tap,id=net0,ifname=vport2,script=no,downscript=no -name vm2 -daemonize
+kvm debian_wheezy_amd64_standard2.qcow2 -device virtio-net-pci,netdev=net0,mac=12:34:56:AB:CD:82 -netdev tap,id=net0,ifname=tap2,script=no,downscript=no -name vm2 -daemonize
 ```
 
-      
-Setup VM2
+Setup VM2, login:`root`, password: `root`
 ```bash
-su
-ifconfig eth0 192.168.21.3 netmask 255.255.255.0 broadcast 192.168.21.255
-route add default gw 192.168.21.1
+ip link set dev eth1 up
+ip addr add 8.8.8.9/24 broadcast 8.8.8.255 dev eth1
+route add default gw 8.8.8.1
 ```
 
 Test the gateway
 ```bash
-ping 192.168.21.1
+ping 8.8.8.1
 ```
 
-Test the VM1 connection
+## Test
+in VM1
 ```bash
-ping 192.168.21.2
+ping 8.8.8.9
 ```
 
      
 ### Minitor Traffic
-
 Monitor Traffic between VM1 and VM2 from the host
 ```bash
-tcpdump -i vport1 icmp
+tcpdump -i tap1 icmp
 ```
