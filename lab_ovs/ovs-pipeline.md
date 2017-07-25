@@ -7,7 +7,7 @@ for i in $(seq 4);do ip tuntap add dev p$i mod tap; ip link set p$i up; done
 ```
 
 ### OVS Creation
-The `fail-mode=secure` creates a empty OVS
+The `fail-mode=secure` creates an OVS with empty flow table
 ```bash
 ovs-vsctl add-br br0 -- set bridge br0 fail-mode=secure
 ```
@@ -27,7 +27,7 @@ ovs-vsctl show
 
 ## Flow Table Manipulation
 ### Table0
-Drop packets whose souurce address is multicasting or `STP`
+Drop packets whose source address is multicasting or `STP`
 ```bash
 ovs-ofctl add-flow br0 table=0,dl_src=01:00:00:00:00:00/01:00:00:00:00:00,actions=drop
 ovs-ofctl add-flow br0 table=0,dl_dst=01:80:c2:00:00:00/ff:ff:ff:ff:ff:f0,actions=drop
@@ -39,9 +39,11 @@ ovs-ofctl add-flow br0 "table=0,priority=0,actions=resubmit(,1)"
 ```
 
 Tests:
-- send multicasting ``: drop
+- send multicasting `ovs-appctl ofproto/trace br0 in_port=1,dl_src=01:00:00:00:00:00`: drop
 - send `STP`: `ovs-appctl ofproto/trace br0 in_port=1,dl_dst=01:80:c2:00:00:05`: drop
-- send a standard packet: `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=0`: resubmit to `Table1`
+- send a standard packet: `ovs-appctl ofproto/trace br0 in_port=1,dl_dst=b8:ca:3a:79:18:fe`: resubmit to `Table1`
+<!--- - send a standard packet: `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=0`: resubmit to `Table1` --->
+
 
 
 ### Table1
@@ -63,20 +65,27 @@ ovs-ofctl add-flow br0 "table=1,priority=99,in_port=4,vlan_tci=0,actions=mod_vla
 ```
 
 Tests:
-- send to port 1 `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=0`: resubmit to `Table2`
+- send to port 1 without VLAN ID `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=0`: resubmit to `Table2`
+- send to port 1 with VLAN ID `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=5`: resubmit to `Table2`
 - send to port 2 without VLAN ID `ovs-appctl ofproto/trace br0 in_port=2,vlan_tci=0`: set VLAN ID to 20 and resubmit to `Table2`
 - send to port 3 with VLAN ID `ovs-appctl ofproto/trace br0 in_port=3,vlan_tci=88`: drop
 
 
 ### Table2
-???
+Create a flow entry in `Table10` witch caches `Inport`-`VLAN ID` for other future packets: 
+- match: `VLAN ID` set as 20, 30 or 40
+- match: `destinatin MAC address` is the `source MAC address` of this packet
+- do: store the `Inport` to `Reg0` which will be used by `Table4`
 ```bash
 ovs-ofctl add-flow br0 "table=2 actions=learn(table=10, NXM_OF_VLAN_TCI[0..11],NXM_OF_ETH_DST[]=NXM_OF_ETH_SRC[],load:NXM_OF_IN_PORT[]->NXM_NX_REG0[0..15]),resubmit(,3)"
 ```
 
 Tests:
-- `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=20,dl_src=50:00:00:00:00:01 -generate`
-- show Table10 `ovs-ofctl dump-flows br0 table=10`:
+- send a packet to `port1` with VLAN ID 20 `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=20,dl_src=40:00:00:00:00:01 -generate`
+- send a packet to `port1` without VLAN ID `ovs-appctl ofproto/trace br0 in_port=1,dl_src=50:00:00:00:00:01 -generate`
+- introduce a conflict `ovs-appctl ofproto/trace br0 in_port=3,vlan_tci=0,dl_src=60:00:00:00:00:01 -generate`
+- introduce a conflict `ovs-appctl ofproto/trace br0 in_port=4,vlan_tci=0,dl_src=60:00:00:00:00:01 -generate`
+- show Table10 `ovs-ofctl dump-flows br0 table=10`
 
 
 ### Table3
@@ -86,7 +95,10 @@ ovs-ofctl add-flow br0 "table=3 priority=50 actions=resubmit(,10),resubmit(,4)"
 ```
 
 Tests: 
-- `ovs-appctl ofproto/trace br0 in_port=1,dl_vlan=20,dl_src=f0:00:00:00:00:01,dl_dst=90:00:00:00:00:01 -generate`
+- send a packet to `port1` with VLAN ID 20 `ovs-appctl ofproto/trace br0 in_port=1,vlan_tci=20,dl_src=40:00:00:00:00:01 -generate`
+- send a packet to `port1` without VLAN ID `ovs-appctl ofproto/trace br0 in_port=1,dl_src=50:00:00:00:00:01 -generate`
+- show Table10 `ovs-ofctl dump-flows br0 table=10`
+                                            
 
 ### Table4
 For all the packets that match `Table10` (`reg0!=0`)
@@ -103,3 +115,6 @@ ovs-ofctl add-flow br0 "table=4,reg0=0,priority=99,dl_vlan=30,actions=1,strip_vl
 ovs-ofctl add-flow br0 "table=4,reg0=0,priority=50,actions=1"
 ```
 
+Tests:
+- send a packet that matches `table10`: `ovs-appctl ofproto/trace br0 in_port=4,vlan_tci=0,dl_src=f0:00:00:00:00:01,dl_dst=60:00:00:00:00:01 -generate`
+- send a packet that doesn't match `table10`: `ovs-appctl ofproto/trace br0 in_port=4,vlan_tci=0,dl_src=60:00:00:00:00:01,dl_dst=70:00:00:00:00:01 -generate`
