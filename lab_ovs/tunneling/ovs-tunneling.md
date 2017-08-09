@@ -116,3 +116,13 @@ before reboot
 ### server2
 - `ovs-vsctl del-br br-tun` 
 - `ip netns del vm2`
+
+## Bug
+### avahi-daemon 
+We should stop the avahi-daemon
+- `service --status-all`
+- `systemctl disable avahi-daemon.socket`
+- `systemctl disable avahi-daemon.service`
+- `vim /lib/systemd/system/cups-browsed.service` and comment `#Wants=avahi-daemon.service`
+- `systemctl stop avahi-daemon.socket` 
+- `systemctl stop avahi-daemon.service` 
