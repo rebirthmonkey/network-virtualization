@@ -2,6 +2,7 @@
 ## VirtualBox 
 Launch 2 `Xenial` VM with a `internal network` through `VirtualBox`
 
+![VXLAN Tunneling](ovs-vxlan-tunneling.jpg "VXLAN")
 
 ## Server1
 ### Namespace `vm1`
