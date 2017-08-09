@@ -39,8 +39,7 @@ gateway 192.168.1.13\n" >> /etc/network/interfaces
 
 ### FlowTable Configuration
 - clear the flowtable: `ovs-ofctl del-flows br-tun table=0`
-Creation of a `VXLAN` with `VXLAN_ID=100` and `in-port=10`
-- create a `VXLAN` between 2 `OVS bridges`: `ovs-vsctl add-port br-tun vtep -- set interface vtep type=vxlan option:local_ip=192.168.55.2 option:remote_ip=192.168.50.2 option:key=flow ofport_request=10`
+- create a `VXLAN` with `VXLAN_ID=100` and `in-port=10` between 2 `OVS bridges`: `ovs-vsctl add-port br-tun vtep -- set interface vtep type=vxlan option:local_ip=192.168.55.2 option:remote_ip=192.168.50.2 option:key=flow ofport_request=10`
 - set `VXLAN_ID=100` for all flows from `VM1` (`in-port=1`): `ovs-ofctl add-flow br-tun "table=0,in_port=1,actions=set_field:100->tun_id,resubmit(,1)"`
 - `ovs-ofctl add-flow br-tun "table=0,actions=resubmit(,1)"`
 
@@ -89,8 +88,7 @@ gateway 192.168.1.43\n" >> /etc/network/interfaces
 
 ### FlowTable Configuration
 - clear the flowtable: `ovs-ofctl del-flows br-tun table=0`
-Creation of a `VXLAN` with `VXLAN_ID=100` and `in-port=10`
-- create a `VXLAN` between 2 `OVS bridges`: `ovs-vsctl add-port br-tun vtep -- set interface vtep type=vxlan option:local_ip=192.168.50.2 option:remote_ip=192.168.55.2 option:key=flow ofport_request=10`
+- create `VXLAN` with `VXLAN_ID=100` and `in-port=10` between 2 `OVS bridges`: `ovs-vsctl add-port br-tun vtep -- set interface vtep type=vxlan option:local_ip=192.168.50.2 option:remote_ip=192.168.55.2 option:key=flow ofport_request=10`
 - set `VXLAN_ID=100` for all flows from `VM1` (`in-port=1`): `ovs-ofctl add-flow br-tun "table=0,in_port=1,actions=set_field:100->tun_id,resubmit(,1)"`
 - `ovs-ofctl add-flow br-tun "table=0,actions=resubmit(,1)"`
 
@@ -104,3 +102,16 @@ Autorisation of traffic between `server2` and `server1`
 - `ovs-ofctl add-flow br-tun "table=1,priority=50,actions=normal"`
 
 ## Test
+In the server1:
+- `ping 192.168.1.13`
+- `ip netns exec vm1 ping 10.0.0.2`
+
+## Cleanup 
+before reboot
+### server1
+- `ovs-vsctl del-br br-tun` 
+- `ip netns del vm1`
+
+### server2
+- `ovs-vsctl del-br br-tun` 
+- `ip netns del vm2`
