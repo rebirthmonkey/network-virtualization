@@ -16,7 +16,7 @@ netmask 255.255.255.0\n \
 address 192.168.1.43\n \
 gateway 192.168.1.13\n" >> /etc/network/interfaces
 ```
-- activate `enp0s3`: `ifdown enp0s3` and `ifup enp0s3`
+- activate `enp0s3`: `ifconfig enp0s3 down` and `ifconfig enp0s3 up` (maybe we need to restart the VM)
 - create OVS bridge `br-tun`: `ovs-vsctl add-br br-tun`
 - create a pair `veth`: `ip link add eth0-vm1 type veth peer name brtun-veth`
 - put `eth0-vm1` in `VM1`: `ip link set eth0-vm1 netns vm1`
@@ -38,6 +38,7 @@ gateway 192.168.1.13\n" >> /etc/network/interfaces
 - `ip netns exec vm1 ip route add default dev eth0-vm1`
 
 ### FlowTable Configuration
+- clear the flowtable: `ovs-ofctl del-flows br-tun table=0`
 Creation of a `VXLAN` with `VXLAN_ID=100` and `in-port=10`
 - create a `VXLAN` between 2 `OVS bridges`: `ovs-vsctl add-port br-tun vtep -- set interface vtep type=vxlan option:local_ip=192.168.55.2 option:remote_ip=192.168.50.2 option:key=flow ofport_request=10`
 - set `VXLAN_ID=100` for all flows from `VM1` (`in-port=1`): `ovs-ofctl add-flow br-tun "table=0,in_port=1,actions=set_field:100->tun_id,resubmit(,1)"`
@@ -65,7 +66,7 @@ netmask 255.255.255.0\n \
 address 192.168.1.13\n \
 gateway 192.168.1.43\n" >> /etc/network/interfaces
 ```
-- activate `enp0s3`: `ifdown enp0s3` and `ifup enp0s3`
+- activate `enp0s3`: `ifconfig enp0s3 down` and `ifconfig enp0s3 up` (maybe we need to restart the VM)
 - create OVS bridge `br-tun`: `ovs-vsctl add-br br-tun`
 - create a pair `veth`: `ip link add eth0-vm2 type veth peer name brtun-veth`
 - put `eth0-vm2` in `vm2`: `ip link set eth0-vm2 netns vm2`
@@ -87,6 +88,7 @@ gateway 192.168.1.43\n" >> /etc/network/interfaces
 - `ip netns exec vm2 ip route add default dev eth0-vm2`
 
 ### FlowTable Configuration
+- clear the flowtable: `ovs-ofctl del-flows br-tun table=0`
 Creation of a `VXLAN` with `VXLAN_ID=100` and `in-port=10`
 - create a `VXLAN` between 2 `OVS bridges`: `ovs-vsctl add-port br-tun vtep -- set interface vtep type=vxlan option:local_ip=192.168.50.2 option:remote_ip=192.168.55.2 option:key=flow ofport_request=10`
 - set `VXLAN_ID=100` for all flows from `VM1` (`in-port=1`): `ovs-ofctl add-flow br-tun "table=0,in_port=1,actions=set_field:100->tun_id,resubmit(,1)"`
