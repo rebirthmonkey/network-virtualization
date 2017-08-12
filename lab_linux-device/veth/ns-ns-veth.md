@@ -27,5 +27,7 @@ ip netns exec ns2 ip addr add 192.168.88.2/24 dev tap2
 ip netns exec ns3 ip addr add 192.168.88.3/24 dev tap3
 ```
 
+The script can be found [here](ns-ns-veth.sh)
+
 ## Test
 - `ip netns exec ns2 ping 192.168.88.3`
