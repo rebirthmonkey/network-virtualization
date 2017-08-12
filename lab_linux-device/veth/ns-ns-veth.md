@@ -1,5 +1,5 @@
-# Namespace to Namespace Communication Through TAP
-communicate 2 namespaces through a pair of TAP
+# Namespace to Namespace Communication Through VETH
+communicate 2 namespaces through a pair of VETH
 
 ## Topology
 ![communicate 2 namespaces through a VETH](ns-ns-veth.jpg)
