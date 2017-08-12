@@ -4,7 +4,7 @@ communicate 2 namespaces through a pair of VETH
 ## Topology
 ![communicate 2 namespaces through a VETH](ns-ns-veth.jpg)
 
-## Commands
+## Manipulation
 - add the 2 namespaces:
 ```bash
 ip netns add ns2
@@ -31,3 +31,7 @@ The script can be found [here](ns-ns-veth.sh)
 
 ## Test
 - `ip netns exec ns2 ping 192.168.88.3`
+
+## Cleanup 
+- `ip netns del ns2`
+- `ip netns del ns3`
