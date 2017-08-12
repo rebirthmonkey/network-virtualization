@@ -2,8 +2,9 @@
 
 ## Lab
 This is a tutorial about different network virtualizatioin technologies:
-- Network Devices
-  - [Tap](lab_linux-device/tap/linux-tap.md)
+- Linux Devices
+  - [Tap Manipulation](lab_linux-device/tap/tap.md)
+  - [Namespace-Namespace through VETH](lab_linux-device/veth/ns-ns-veth.md)
 - Linux Bridge
   - [Namespace-Namespace Communication](lab_linux-bridge/linux-br-inter-namespace.md)
   - [Namespace-Internet Communication](lab_linux-bridge/linux-br-namespace-ext.md)
