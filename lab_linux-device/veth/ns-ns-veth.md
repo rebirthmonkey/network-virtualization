@@ -2,7 +2,7 @@
 communicate 2 namespaces through a pair of TAP
 
 ## Topology
-![communicate 2 namespaces through a pair of TAP](ns-ns-tap.jpg)
+![communicate 2 namespaces through a VETH](ns-ns-veth.jpg)
 
 ## Commands
 - add the 2 namespaces:
