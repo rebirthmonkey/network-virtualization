@@ -2,7 +2,7 @@
 communicate 2 namespaces through a pair of VETH
 
 ## Topology
-![communicate 2 namespaces through a VETH](ns-ns-veth.jpg)
+![communicate 2 namespaces through a VETH](ns-veth-ns.jpg)
 
 ## Manipulation
 - add the 2 namespaces:
@@ -27,7 +27,7 @@ ip netns exec ns2 ip addr add 192.168.88.2/24 dev tap2
 ip netns exec ns3 ip addr add 192.168.88.3/24 dev tap3
 ```
 
-The script can be found [here](ns-ns-veth.sh)
+The script can be found [here](ns-veth-ns.sh)
 
 ## Test
 - `ip netns exec ns2 ping 192.168.88.3`
@@ -35,3 +35,4 @@ The script can be found [here](ns-ns-veth.sh)
 ## Cleanup 
 - `ip netns del ns2`
 - `ip netns del ns3`
+The cleanup script is [here](ns-veth-ns-clean.sh)

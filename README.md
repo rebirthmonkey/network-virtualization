@@ -4,9 +4,9 @@
 This is a tutorial about different network virtualizatioin technologies:
 - Linux Devices
   - [Tap Manipulation](lab_linux-device/tap/tap.md)
-  - [Inter-Namespace Communication through VETH](lab_linux-device/veth/ns-ns-veth.md)
+  - [Inter-Namespace Communication through VETH](lab_linux-device/veth/ns-veth-ns.md)
 - Linux Bridge
-  - [Inter-Namespace Communication through Linux Bridge](lab_linux-bridge/ns-ns-br.md)
+  - [Inter-Namespace Communication through Linux Bridge](lab_linux-bridge/ns-br-ns.md)
   - [Namespace-Internet Communication](lab_linux-bridge/linux-br-namespace-ext.md)
   - [Namespace-Namespace-Internet Communication]()
   - [KVM VM-VM Communication](lab_linux-bridge/linux-bridge-kvm-vm.md)

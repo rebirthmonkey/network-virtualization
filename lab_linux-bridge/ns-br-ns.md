@@ -1,5 +1,9 @@
 # Linux Bridge： Inter-Namespace Communication through Linux Bridge
 Communication between 2 Namespaces
+
+## Topology
+![communicate between 2 namespaces through a Linux bridge](ns-br-ns.jpg) 
+
 ## Prerequisite
 - install Linux Bridge
 ```bash
@@ -56,7 +60,13 @@ ip netns exec ns2 ip addr add 192.168.88.2/24 dev tap2
 ip netns exec ns3 ip addr add 192.168.88.3/24 dev tap3
 ```
 
+The script can be found [here](ns-br-ns.sh) and the cleanup script is [here](ns-br-ns-clean.sh)
+
 ## Test
 ```bash
 ip netns exec ns2 ping 192.168.88.3
 ```
+
+## Bug
+In VirtualBox with `NAT` or `Bridge` network mode, maybe the ping doesn't work
+- solution: activate forwarding in the VM: `iptables -P FORWARD ACCEPT`
