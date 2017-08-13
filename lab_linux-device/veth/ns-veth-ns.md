@@ -35,4 +35,5 @@ The script can be found [here](ns-veth-ns.sh)
 ## Cleanup 
 - `ip netns del ns2`
 - `ip netns del ns3`
+
 The cleanup script is [here](ns-veth-ns-clean.sh)
