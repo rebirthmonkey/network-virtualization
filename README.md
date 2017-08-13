@@ -14,11 +14,11 @@ This is a tutorial about different network virtualizatioin technologies:
   - [VM-Bridge-VM-Bridge-Internet Communication]()
 - OpenVSwitch
   - [OpenVSwitch Manipulation](lab_ovs/ovs-manipulation.md)
-  - [Namespace-Namespace Communication](lab_ovs/ovs-namespace.md)
-  - [Namespace-Internet Communication]()
-  - [Namespace-Namespace-Internet Communication]()
-  - [KVM VM-VM Communication](lab_ovs/ovs-kvm-vm.md)
-  - [Libvirt VM-VM Communication](lab_ovs/libvirt/ovs-libvirt-vm.md)
+  - [Namespace-OVS-Namespace Communication](lab_ovs/ovs-namespace.md)
+  - [Namespace-OVS-Internet Communication]()
+  - [Namespace-OVS-Namespace-OVS-Internet Communication]()
+  - [KVM: VM-OVS-VM Communication](lab_ovs/ovs-kvm-vm.md)
+  - [Libvirt VM-OVS-VM Communication](lab_ovs/libvirt/ovs-libvirt-vm.md)
   - [FlowTable Pipeline](lab_ovs/ovs-pipeline.md)
   - [VXLan Tunneling](lab_ovs/tunneling/ovs-tunneling.md)
   
