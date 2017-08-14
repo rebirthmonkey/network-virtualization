@@ -7,7 +7,7 @@ This is a tutorial about different network virtualizatioin technologies:
   - [Namespace-VETH-Namespace Communication](lab_linux-device/veth/ns-veth-ns.md)
 - Linux Bridge
   - [Namespace-Bridge-Namespace Communication](lab_linux-bridge/ns-br-ns.md)
-  - [Namespace-Bridge-Internet Communication](lab_linux-bridge/linux-br-namespace-ext.md)
+  - [Namespace-Bridge-Internet Communication](lab_linux-bridge/ns-br-ext.md)
   - [Namespace-Bridge-Namespace-Bridge-Internet Communication]()
   - [VM-Bridge-VM Communication](lab_linux-bridge/linux-bridge-kvm-vm.md)
   - [VM-Bridge-Internet Communication]()

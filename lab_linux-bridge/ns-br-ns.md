@@ -5,12 +5,6 @@ Communication between 2 Namespaces
 ![communicate between 2 namespaces through a Linux bridge](ns-br-ns.jpg) 
 
 ## Prerequisite
-- install Linux Bridge
-```bash
-sudo apt install bridge-utils
-sudo su
-```
-
 - VirtualBox Network on `Internal` mode
 
 ## Manipulation
