@@ -26,6 +26,9 @@ Check all functions used by ovs-vsctl
 strace ovs-vsctl show
 ```
 
+## Scenario
+![Working Scenario with OVS](ovs-manipulation.jpg) 
+
 ## OVS Bridge
 - `ovs-vsctl add-br sw`: add a new OVS bridge 
 - `ovs-vsctl list bridge sw`: lookup
