@@ -1,6 +1,6 @@
 # Linux Bridge with KVM VM Lab
 ## Topology
-![communicate between 2 VMs through a Linux bridge](vm-br-vm-kvm.jpg)
+![communicate between 2 VMs through a Linux bridge](vm-br-vm.jpg)
 
 ## Network Devices
 - create a Linux private bridge: `ip link add br88 type bridge`
