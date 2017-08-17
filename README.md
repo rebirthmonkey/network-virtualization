@@ -9,7 +9,7 @@ This is a tutorial about different network virtualizatioin technologies:
   - [Namespace-Bridge-Namespace Communication](lab_linux-bridge/ns-br-ns.md)
   - [Namespace-Bridge-Internet Communication](lab_linux-bridge/ns-br-ext.md)
   - [Namespace-Bridge-Namespace-Bridge-Internet Communication]()
-  - [VM-Bridge-VM Communication](lab_linux-bridge/linux-bridge-kvm-vm.md)
+  - [VM-Bridge-VM Communication](lab_linux-bridge/vm-br-vm-kvm.md)
   - [VM-Bridge-Internet Communication]()
   - [VM-Bridge-VM-Bridge-Internet Communication]()
 - OpenVSwitch
