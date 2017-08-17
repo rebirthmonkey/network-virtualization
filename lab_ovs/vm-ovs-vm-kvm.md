@@ -1,9 +1,9 @@
-# Linux Bridge with KVM VM Lab
+# OVS Bridge between VMs
 ## Topology
-![communicate between 2 VMs through a Linux bridge](vm-br-vm.jpg)
+![communicate between 2 VMs through a OVS bridge](vm-ovs-vm.jpg)
 
 ## Network Devices
-- create a Linux private bridge: `ip link add br88 type bridge`
+- create a OVS private bridge: `ovs-vsctl add-br ovs88`
 - enable forwarding: `echo 1 > /proc/sys/net/ipv4/ip_forward` 
 - create 2 *TAP* devices:
  ```bash
@@ -17,11 +17,11 @@ ip link set tap3 up
 ```
 - bind 2 *TAP* devices:
 ```bash
-ip link set tap2 master br88
-ip link set tap3 master br88
-ip link set br88 up
+ovs-vsctl add-port ovs88 tap2
+ovs-vsctl add-port ovs88 tap3
+ip link set dev ovs88 up
 ```
-- check: `brctl show br88`
+- check: `ovs-vsctl show`
 
 ## KVM
 - launch VM2 and VM3:
@@ -30,7 +30,7 @@ qemu-system-x86_64 -hda debian_wheezy_amd64_standard2.qcow2 -device e1000,netdev
 qemu-system-x86_64 -hda debian_wheezy_amd64_standard3.qcow2 -device e1000,netdev=net0,mac=00:11:22:33:44:03 -netdev tap,id=net0,ifname=tap3,script=no,downscript=no -name vm3 -daemonize
 ```
 
-The script for the configuration is [here](vm-br-vm-kvm.sh)
+The script for the configuration is [here](vm-ovs-vm-kvm.sh) and for cleanup is [here](vm-ovs-vm-kvm-clean.sh).
 
 - config IP address of each VM (login: `root`, password): `root`:
   - VM2:
@@ -48,11 +48,7 @@ ip addr add 192.168.88.3/24 dev eth2
 - in VM2: `ping 192.168.88.3`
 
 ## Cleanup
-The cleanup script is [here](vm-br-vm-kvm-clean.sh)
+The cleanup script is [here](vm-ovs-vm-kvm-clean.sh)
 
-## Bug
-If cannot ping, add an IP address for *br88* and ping the bridge from the VM
-```bash
-ip addr add 192.168.88.4/24 dev br88
-```
-
+### Minitor Traffic
+Monitor Traffic between VM2 and VM3 from the host: `tcpdump -i tap1 icmp`
