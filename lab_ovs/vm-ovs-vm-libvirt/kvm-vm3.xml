@@ -1,5 +1,5 @@
 <domain type='qemu'>
-	<name>vm1</name>
+	<name>vm3</name>
     <uuid>4dd81eb6-fcc2-1b6c-db53-34131bf6b089</uuid>
     <memory unit='KiB'>524288</memory>
     <currentMemory unit='KiB'>524288</currentMemory>

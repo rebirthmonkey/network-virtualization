@@ -32,7 +32,7 @@ qemu-system-x86_64 -hda debian_wheezy_amd64_standard3.qcow2 -device e1000,netdev
 
 The script for the configuration is [here](vm-ovs-vm-kvm.sh) and for cleanup is [here](vm-ovs-vm-kvm-clean.sh).
 
-- config IP address of each VM (login: `root`, password): `root`:
+- configure IP address of each VM (login: `root`, password: `root`):
   - VM2:
 ```bash
 ip link set eth1 up
