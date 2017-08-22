@@ -43,11 +43,13 @@ ip netns exec red ip link set dev lo up
 ip netns exec green ip addr add 8.8.8.8/24 dev g-veth0
 ip netns exec red ip addr add 8.8.8.9/24 dev r-veth0
 
+# bind interface to Linux bridges
 brctl addif g-bridge g-veth0-bis
 brctl addif g-bridge g-veth1-bis
 brctl addif r-bridge r-veth0-bis
 brctl addif r-bridge r-veth1-bis
 
+# bind OVS
 ovs-vsctl add-port ovs-br g-veth1
 ovs-vsctl add-port ovs-br r-veth1
 
