@@ -15,7 +15,7 @@ brctl addbr g-bridge
 brctl addbr r-bridge
 
 # create 1 OVS bridge:
-ovs-vsctl add-br ovs
+ovs-vsctl add-br ovs-br
 
 # activate all devices:
 ip link set dev g-bridge up
@@ -42,6 +42,14 @@ ip netns exec red ip link set dev lo up
 # add IP addresses to the devices:
 ip netns exec green ip addr add 8.8.8.8/24 dev g-veth0
 ip netns exec red ip addr add 8.8.8.9/24 dev r-veth0
+
+brctl addif g-bridge g-veth0-bis
+brctl addif g-bridge g-veth1-bis
+brctl addif r-bridge r-veth0-bis
+brctl addif r-bridge r-veth1-bis
+
+ovs-vsctl add-port ovs-br g-veth1
+ovs-vsctl add-port ovs-br r-veth1
 
 # first test:
 ip netns exec red ping 8.8.8.8
