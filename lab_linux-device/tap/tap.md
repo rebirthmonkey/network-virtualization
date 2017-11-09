@@ -4,7 +4,7 @@
 - create a TAP device: `ip tuntap add dev tap1 mode tap`
 - attach an IP address: `ip addr add 192.168.88.88/24 dev tap1`
 - listen to port 8888 for all network devices: `nc -l 8888`
-- open another terminal, establish a session on the port 8888 of `tap1`, and send messages: `nc 88888 192.168.88.88 8888`
+- open another terminal, establish a session on the port 8888 of `tap1`, and send messages: `nc 192.168.88.88 8888`
 - we can send messages now
 
 ## Send data through a TAP file
