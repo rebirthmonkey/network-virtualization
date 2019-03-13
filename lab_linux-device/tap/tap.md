@@ -11,12 +11,12 @@
 - create and activate a TAP device
 ```bash
 ip tuntap add dev tap1 mode tap
-ip link set dev tap89 up
+ip link set dev tap1 up
 ```
-- open a new terminal and monitor `tap89`: `tcpdump -i tap89 -vv`
+- open a new terminal and monitor `tap89`: `tcpdump -i tap1 -vv`
 - in another terminal, compile and execute the `tap.c` program:
 ```bash
 gcc -Wall tap.c -o tapw
 sudo ./tapw
 ```
-- we can see that the `tcpdump` monitors data sent from `tap89`
+- we can see that the `tcpdump` monitors data sent from `tap1`
